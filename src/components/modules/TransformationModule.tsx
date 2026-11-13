@@ -12,6 +12,7 @@ import {
   Download,
 } from 'lucide-react';
 import { TransformationStats } from '../../types/momentum';
+import { notify } from '../../utils/feedback';
 
 interface TransformationModuleProps {
   stats: TransformationStats;
@@ -50,7 +51,7 @@ export const TransformationModule: React.FC<TransformationModuleProps> = ({
       });
     }
     setIsEditingReflection(false);
-    alert('🎉 Đã cập nhật thành công đánh giá chuyển hóa 30 ngày của bạn!');
+    notify('🎉 Đã cập nhật thành công đánh giá chuyển hóa 30 ngày của bạn!', 'success');
   };
 
   const kpis = [

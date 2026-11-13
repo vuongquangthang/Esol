@@ -36,8 +36,32 @@ export const TaskManagementModule: React.FC<TaskManagementModuleProps> = ({
   const [selectedProject, setSelectedProject] = useState<string | 'all'>('all');
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus | 'all'>('all');
   const [breakdownModalTask, setBreakdownModalTask] = useState<Task | null>(null);
+  const [prioritySwapTask, setPrioritySwapTask] = useState<Task | null>(null);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
   const [newSubtaskMinutes, setNewSubtaskMinutes] = useState(15);
+
+  const todayPriorityTasks = tasks.filter((task) => task.isTodayPriority);
+
+  const handlePriorityToggle = (task: Task) => {
+    if (task.isTodayPriority) {
+      onSetTodayPriority(task.id, false);
+      return;
+    }
+
+    if (todayPriorityTasks.length >= 3) {
+      setPrioritySwapTask(task);
+      return;
+    }
+
+    onSetTodayPriority(task.id, true);
+  };
+
+  const handlePrioritySwap = (taskToRemove: Task) => {
+    if (!prioritySwapTask) return;
+    onSetTodayPriority(taskToRemove.id, false);
+    onSetTodayPriority(prioritySwapTask.id, true);
+    setPrioritySwapTask(null);
+  };
 
   // Filter tasks
   const filteredTasks = tasks.filter((t) => {
@@ -181,6 +205,70 @@ export const TaskManagementModule: React.FC<TaskManagementModuleProps> = ({
         </div>
       </div>
 
+      {prioritySwapTask && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div
+            className="w-full max-w-lg rounded-2xl border border-slate-200 dark:border-[#2a2d39] bg-white dark:bg-[#161821] shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="priority-swap-title"
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-slate-100 dark:border-[#22252e] px-5 py-4">
+              <div>
+                <h3 id="priority-swap-title" className="text-base font-bold text-slate-900 dark:text-white">
+                  Đã đủ 3 ưu tiên hôm nay
+                </h3>
+                <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                  Chọn một ưu tiên hiện tại để thay bằng “{prioritySwapTask.title}”.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPrioritySwapTask(null)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-[#20232c] dark:hover:text-slate-200"
+                aria-label="Đóng modal đổi ưu tiên"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="space-y-2 p-5">
+              {todayPriorityTasks.map((priorityTask, index) => (
+                <button
+                  key={priorityTask.id}
+                  type="button"
+                  onClick={() => handlePrioritySwap(priorityTask)}
+                  className="flex w-full items-center gap-3 rounded-xl border border-slate-200 p-3 text-left transition-colors hover:border-brand-400 hover:bg-brand-50 dark:border-[#2a2d39] dark:hover:border-brand-500 dark:hover:bg-brand-950/30"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-xs font-bold text-amber-600 dark:text-amber-400">
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
+                      {priorityTask.title}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] text-slate-500 dark:text-slate-400">
+                      Bấm để bỏ ưu tiên và thay bằng task mới
+                    </span>
+                  </span>
+                  <Star className="h-4 w-4 shrink-0 fill-current text-amber-500" />
+                </button>
+              ))}
+            </div>
+
+            <div className="flex justify-end border-t border-slate-100 px-5 py-4 dark:border-[#22252e]">
+              <button
+                type="button"
+                onClick={() => setPrioritySwapTask(null)}
+                className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:border-[#2b2e3a] dark:text-slate-200 dark:hover:bg-[#1f222b]"
+              >
+                Giữ nguyên Top 3
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Task List */}
       <div className="space-y-3">
         {filteredTasks.length === 0 ? (
@@ -234,7 +322,7 @@ export const TaskManagementModule: React.FC<TaskManagementModuleProps> = ({
                       {/* Today Priority Star */}
                       <button
                         type="button"
-                        onClick={() => onSetTodayPriority(task.id, !task.isTodayPriority)}
+                        onClick={() => handlePriorityToggle(task)}
                         title={
                           task.isTodayPriority
                             ? 'Bỏ khỏi Top 3 ưu tiên hôm nay'

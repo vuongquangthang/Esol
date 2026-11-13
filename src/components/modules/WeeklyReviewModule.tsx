@@ -5,6 +5,7 @@ import {
   History,
 } from 'lucide-react';
 import { WeeklyReview } from '../../types/momentum';
+import { notify } from '../../utils/feedback';
 
 interface WeeklyReviewModuleProps {
   weeklyReviews: WeeklyReview[];
@@ -36,7 +37,7 @@ export const WeeklyReviewModule: React.FC<WeeklyReviewModuleProps> = ({
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!whatWentWell.trim() && !nextWeekChanges.trim()) {
-      alert('Vui lòng chia sẻ ít nhất điều bạn đã làm tốt và kế hoạch cải tiến cho tuần sau!');
+      notify('Vui lòng chia sẻ ít nhất điều bạn đã làm tốt và kế hoạch cải tiến cho tuần sau!', 'error');
       return;
     }
 
@@ -58,7 +59,7 @@ export const WeeklyReviewModule: React.FC<WeeklyReviewModuleProps> = ({
     setRootCauses('');
     setUnrealisticPlans('');
     setNextWeekChanges('');
-    alert('🎉 Đã hoàn tất và lưu lại phiên Weekly Review! Chúc bạn có tuần mới tràn đầy năng suất!');
+    notify('🎉 Đã hoàn tất và lưu lại phiên Weekly Review! Chúc bạn có tuần mới tràn đầy năng suất!', 'success');
   };
 
   return (

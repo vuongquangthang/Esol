@@ -10,10 +10,9 @@ import {
   TrendingUp,
   Settings,
   Plus,
-  Sun,
-  Moon,
   Flame,
   X,
+  PanelLeftClose,
 } from 'lucide-react';
 import { ActiveTab } from '../hooks/useMomentumStore';
 
@@ -21,24 +20,24 @@ interface NavigationProps {
   activeTab: ActiveTab;
   onSelectTab: (tab: ActiveTab) => void;
   onOpenQuickCapture: () => void;
-  isDark: boolean;
-  onToggleTheme: () => void;
   isOpenMobile: boolean;
   onCloseMobile: () => void;
   pendingTasksCount: number;
   procrastinationCount: number;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
   activeTab,
   onSelectTab,
   onOpenQuickCapture,
-  isDark,
-  onToggleTheme,
   isOpenMobile,
   onCloseMobile,
   pendingTasksCount,
   procrastinationCount,
+  isCollapsed = false,
+  onToggleCollapse,
 }) => {
   const navItems = [
     {
@@ -111,41 +110,47 @@ export const Navigation: React.FC<NavigationProps> = ({
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static top-0 bottom-0 left-0 z-50 w-72 bg-white dark:bg-[#111317] border-r border-slate-200 dark:border-[#22252e] flex flex-col transition-transform duration-300 ease-in-out ${
-          isOpenMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        className={`fixed lg:static top-0 bottom-0 left-0 z-50 h-screen bg-white dark:bg-[#111317] border-r border-slate-200 dark:border-[#22252e] flex flex-col transition-all duration-300 ease-in-out shrink-0 ${
+          isOpenMobile ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'
+        } ${
+          isCollapsed
+            ? 'lg:w-0 lg:min-w-0 lg:max-w-0 lg:overflow-hidden lg:opacity-0 lg:border-r-0 lg:pointer-events-none'
+            : 'lg:w-72 lg:opacity-100'
         }`}
       >
-        {/* Brand */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-[#1e2129]">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-              <Sparkles className="w-5 h-5" />
+        {/* Brand Header (Exact height h-14 matches main screen top bar) */}
+        <div className="h-14 shrink-0 flex items-center justify-between px-4 border-b border-slate-200 dark:border-[#22252e]">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-brand-500/20 shrink-0">
+              <Sparkles className="w-4 h-4" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white">
+                <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white truncate">
                   ESOL
                 </span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20">
+                <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20 shrink-0">
                   OS 1.0
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
                 Personal Productivity OS
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={onToggleTheme}
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-[#1a1c23] transition-colors"
-              title="Đổi giao diện Sáng / Tối"
-              aria-label="Đổi giao diện Sáng / Tối"
-            >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
-            </button>
+          <div className="flex items-center gap-1 shrink-0">
+            {onToggleCollapse && (
+              <button
+                type="button"
+                onClick={onToggleCollapse}
+                className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-[#1a1c23] transition-colors hidden lg:flex items-center justify-center"
+                title="Thu gọn thanh điều hướng (Ctrl+B)"
+                aria-label="Thu gọn thanh điều hướng"
+              >
+                <PanelLeftClose className="w-4 h-4" />
+              </button>
+            )}
             <button
               type="button"
               onClick={onCloseMobile}
@@ -158,7 +163,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Quick Capture Button */}
-        <div className="px-4 py-3">
+        <div className="px-4 py-3 shrink-0">
           <button
             type="button"
             onClick={onOpenQuickCapture}
@@ -170,7 +175,11 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Navigation List */}
-        <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+        <nav
+          className={`flex-1 px-3 py-2 space-y-1 ${
+            isCollapsed ? 'overflow-hidden pointer-events-none' : 'overflow-y-auto'
+          }`}
+        >
           <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400">
             Trung tâm điều hành
           </div>

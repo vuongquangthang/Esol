@@ -18,6 +18,7 @@ import {
   ProcrastinationBarrier,
   RecoveryActionType,
 } from '../../types/momentum';
+import { notify } from '../../utils/feedback';
 
 interface AntiProcrastinationModuleProps {
   tasks: Task[];
@@ -68,7 +69,7 @@ export const AntiProcrastinationModule: React.FC<AntiProcrastinationModuleProps>
       }, 1000);
     } else if (twoMinSeconds === 0 && twoMinRunning) {
       setTwoMinRunning(false);
-      alert('🎉 2 phút đã trôi qua! Quán tính khởi động đã được thiết lập. Hãy tiếp tục làm việc nhé!');
+      notify('🎉 2 phút đã trôi qua! Quán tính khởi động đã được thiết lập. Hãy tiếp tục làm việc nhé!', 'success');
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -215,7 +216,7 @@ export const AntiProcrastinationModule: React.FC<AntiProcrastinationModuleProps>
       setTwoMinSeconds(120);
       setTwoMinRunning(true);
     } else {
-      alert(`Đã ghi nhận giải pháp phục hồi: "${actionLabel}". Tiếp tục tiến lên nào!`);
+      notify(`Đã ghi nhận giải pháp phục hồi: "${actionLabel}". Tiếp tục tiến lên nào!`, 'success');
     }
 
     setSelectedBarrier(null);

@@ -29,6 +29,7 @@ import {
   INITIAL_TRANSFORMATION,
   getTodayDateString,
 } from '../constants/momentumMockData';
+import { notify, requestConfirmation } from '../utils/feedback';
 
 const STORE_KEY = 'momentum_personal_os_v1';
 const SHOW_DEMO_DATA_KEY = `${STORE_KEY}_show_demo_data`;
@@ -338,7 +339,7 @@ export function useMomentumStore() {
     setTasks((prev) => {
       const currentPriorities = prev.filter((t) => t.isTodayPriority && t.id !== id);
       if (makePriority && currentPriorities.length >= 3) {
-        alert('Quy tắc ESOL: Chỉ chọn tối đa 3 ưu tiên chính mỗi ngày để đảm bảo sự tập trung cao nhất!');
+        notify('Quy tắc ESOL: Chỉ chọn tối đa 3 ưu tiên chính mỗi ngày để đảm bảo sự tập trung cao nhất!', 'error');
         return prev;
       }
       return prev.map((t) => (t.id === id ? { ...t, isTodayPriority: makePriority } : t));
@@ -522,8 +523,8 @@ export function useMomentumStore() {
   }, []);
 
   // --- Utility Actions ---
-  const resetToMockData = useCallback(() => {
-    if (confirm('Bạn có chắc chắn muốn nạp lại dữ liệu mẫu của ESOL OS không?')) {
+  const resetToMockData = useCallback(async () => {
+    if (await requestConfirmation('Bạn có chắc chắn muốn nạp lại dữ liệu mẫu của ESOL OS không?')) {
       setTasks(INITIAL_TASKS);
       setProjects(INITIAL_PROJECTS);
       setGoals(INITIAL_GOALS);
@@ -585,9 +586,9 @@ export function useMomentumStore() {
       if (data.healthLogs) setHealthLogs(data.healthLogs);
       if (data.weeklyReviews) setWeeklyReviews(data.weeklyReviews);
       if (data.transformationStats) setTransformationStats(data.transformationStats);
-      alert('Nhập dữ liệu thành công!');
+      notify('Nhập dữ liệu thành công!', 'success');
     } catch {
-      alert('Tệp dữ liệu không hợp lệ!');
+      notify('Tệp dữ liệu không hợp lệ!', 'error');
     }
   }, []);
 

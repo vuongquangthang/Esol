@@ -27,6 +27,7 @@ import {
   Habit,
   LifeDomain,
 } from '../../types/momentum';
+import { notify } from '../../utils/feedback';
 
 interface LifeManagementModuleProps {
   tasks: Task[];
@@ -133,7 +134,7 @@ export const LifeManagementModule: React.FC<LifeManagementModuleProps> = ({
     e.preventDefault();
     const amountNum = parseFloat(finAmount);
     if (!finDesc.trim() || isNaN(amountNum) || amountNum <= 0) {
-      alert('Vui lòng nhập mô tả và số tiền hợp lệ (> 0)!');
+      notify('Vui lòng nhập mô tả và số tiền hợp lệ (> 0)!', 'error');
       return;
     }
 

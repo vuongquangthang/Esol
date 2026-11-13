@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { LifeDomain, Priority, Task, DOMAINS } from '../types/momentum';
+import { notify } from '../utils/feedback';
 
 interface QuickCaptureModalProps {
   isOpen: boolean;
@@ -37,7 +38,7 @@ export const QuickCaptureModal: React.FC<QuickCaptureModalProps> = ({
     if (!trimmed) return;
 
     if (isTodayPriority && currentPriorityCount >= 3) {
-      alert('Bạn đã có đủ 3 ưu tiên chính cho hôm nay! Công việc sẽ được lưu mà không ghim vào Top 3.');
+      notify('Bạn đã có đủ 3 ưu tiên chính cho hôm nay! Công việc sẽ được lưu mà không ghim vào Top 3.');
       setIsTodayPriority(false);
     }
 

@@ -74,7 +74,10 @@ ESOL không hoạt động như một to-do list rời rạc, mà vận hành th
 ---
 
 ### ⏱️ Module 04: Focus Mode & Distraction Parking Lot
-- **Đồng hồ đếm giờ:** Chọn Pomodoro chuẩn 25 phút, Deep Work 45 phút, 50 phút hoặc Sprint 15 phút.
+- **Pomodoro theo chu kỳ:** Chọn Pomodoro 25/5 hoặc 50/10 (làm việc/nghỉ), sau đó chọn số chu kỳ muốn thực hiện. Hệ thống tự chuyển giữa thời gian làm việc và nghỉ.
+- **Làm việc sâu:** Chọn thời lượng đếm ngược tùy ý, phù hợp với một phiên tập trung dài.
+- **Đếm giờ tập trung:** Dùng bộ đếm tăng khi bạn muốn theo dõi thời gian đã tập trung mà không đặt giới hạn.
+- **Tra cứu trong lúc tập trung:** Bạn có thể chuyển sang tab khác để tra cứu thông tin. Đồng hồ vẫn tiếp tục chạy và không bị đặt lại; quay lại tab Focus để tiếp tục phiên.
 - **Bãi đỗ xao nhãng (Distraction Parking Lot):**
   - Trong lúc đang tập trung cao độ, nếu não bộ bỗng nhiên nghĩ đến một việc vặt (nhớ ra cần nộp tiền điện, muốn lướt tin tức...), **đừng chuyển tab**!
   - Hãy gõ ngay ý nghĩ đó vào ô "Đỗ lại" bên dưới. Ý nghĩ được lưu trữ an toàn, giải phóng não bộ để tiếp tục mạch làm việc.
