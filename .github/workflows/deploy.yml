@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ] # Chạy workflow mỗi khi có lệnh push lên nhánh main
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
