@@ -203,7 +203,7 @@ export function useMomentumStore() {
 
   // Selected Task for quick actions (Focus / Anti-procrastination / Breakdown)
   const [focusTargetTask, setFocusTargetTask] = useState<Task | null>(() => {
-    return INITIAL_TASKS.find((t) => t.isTodayPriority && t.status !== 'done') || INITIAL_TASKS[0];
+    return tasks.find((t) => t.isTodayPriority && t.status !== 'done') || tasks[0] || null;
   });
   const [procrastinationTargetTask, setProcrastinationTargetTask] = useState<Task | null>(null);
   const [breakdownTargetTask, setBreakdownTargetTask] = useState<Task | null>(null);
@@ -523,6 +523,28 @@ export function useMomentumStore() {
   }, []);
 
   // --- Utility Actions ---
+  const clearAllData = useCallback(async () => {
+    const confirmed = await requestConfirmation(
+      'Bạn có chắc chắn muốn xóa toàn bộ dữ liệu ESOL trên trình duyệt này? Công việc, dự án, mục tiêu, thói quen, lịch sử tập trung, tài chính, sức khỏe và các báo cáo sẽ bị xóa. Thao tác này không thể hoàn tác. Hãy xuất bản sao lưu JSON nếu cần giữ lại dữ liệu.',
+    );
+    if (!confirmed) return;
+
+    setTasks([]);
+    setProjects([]);
+    setGoals([]);
+    setHabits([]);
+    setProcrastinationLogs([]);
+    setFocusSessions([]);
+    setFinanceTransactions([]);
+    setHealthLogs([]);
+    setWeeklyReviews([]);
+    setTransformationStats(EMPTY_TRANSFORMATION_STATS);
+    setFocusTargetTask(null);
+    setProcrastinationTargetTask(null);
+    setBreakdownTargetTask(null);
+    notify('Đã xóa toàn bộ dữ liệu ESOL.', 'success');
+  }, []);
+
   const resetToMockData = useCallback(async () => {
     if (await requestConfirmation('Bạn có chắc chắn muốn nạp lại dữ liệu mẫu của ESOL OS không?')) {
       setTasks(INITIAL_TASKS);
@@ -831,6 +853,7 @@ export function useMomentumStore() {
     // Transformation stats
     updateTransformationStats,
     // Backup & Reset
+    clearAllData,
     resetToMockData,
     exportDataJSON,
     importDataJSON,

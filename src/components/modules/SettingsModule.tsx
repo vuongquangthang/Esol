@@ -9,6 +9,7 @@ import {
   Database,
   Eye,
   EyeOff,
+  Trash2,
 } from 'lucide-react';
 
 interface SettingsModuleProps {
@@ -19,6 +20,7 @@ interface SettingsModuleProps {
   onExportData: () => void;
   onImportData: (jsonStr: string) => void;
   onResetToMock: () => void;
+  onClearAllData: () => Promise<void>;
   statsPreview?: {
     tasksCount: number;
     habitsCount: number;
@@ -37,6 +39,7 @@ export const SettingsModule: React.FC<SettingsModuleProps> = ({
   onExportData,
   onImportData,
   onResetToMock,
+  onClearAllData,
   statsPreview,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -228,6 +231,22 @@ export const SettingsModule: React.FC<SettingsModuleProps> = ({
             <span>Nạp lại dữ liệu mẫu gốc</span>
           </button>
         </div>
+      </div>
+
+      <div className="p-5 rounded-2xl border border-rose-200 dark:border-rose-900/40 bg-white dark:bg-[#161821] space-y-3">
+        <h3 className="text-sm font-bold text-rose-600 dark:text-rose-400">Xóa toàn bộ dữ liệu</h3>
+        <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+          Xóa toàn bộ dữ liệu ESOL trên trình duyệt này. Thao tác không thể hoàn tác.
+          Bạn có thể xuất bản sao lưu JSON ở trên trước khi xóa.
+        </p>
+        <button
+          type="button"
+          onClick={onClearAllData}
+          className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 rounded-xl transition-colors"
+        >
+          <Trash2 className="w-4 h-4" />
+          <span>Xóa toàn bộ dữ liệu</span>
+        </button>
       </div>
 
       {/* 3 Design Boundaries of ESOL */}

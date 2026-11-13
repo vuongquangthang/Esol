@@ -129,9 +129,6 @@ export const Navigation: React.FC<NavigationProps> = ({
                 <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white truncate">
                   ESOL
                 </span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20 shrink-0">
-                  OS 1.0
-                </span>
               </div>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
                 Personal Productivity OS
@@ -252,15 +249,6 @@ export const Navigation: React.FC<NavigationProps> = ({
           })}
         </nav>
 
-        {/* Footer info: The ESOL Loop */}
-        <div className="p-4 border-t border-slate-100 dark:border-[#1e2129] bg-slate-50/50 dark:bg-[#14161c]">
-          <div className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            THE ESOL LOOP
-          </div>
-          <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">
-            Capture ➔ Plan ➔ Execute ➔ Track ➔ Review &amp; Improve
-          </div>
-        </div>
       </aside>
     </>
   );

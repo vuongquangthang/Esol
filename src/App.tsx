@@ -13,6 +13,7 @@ import { WeeklyReviewModule } from './components/modules/WeeklyReviewModule';
 import { TransformationModule } from './components/modules/TransformationModule';
 import { SettingsModule } from './components/modules/SettingsModule';
 import { getTodayDateString } from './constants/momentumMockData';
+import { getWeeklyActivity } from './utils/weeklyActivity';
 import { Menu, Plus, PanelLeftClose, PanelLeftOpen, Sun, Moon } from 'lucide-react';
 
 export function App() {
@@ -88,6 +89,7 @@ export function App() {
     // Transformation
     updateTransformationStats,
     // Backup & Reset
+    clearAllData,
     resetToMockData,
     exportDataJSON,
     importDataJSON,
@@ -146,15 +148,15 @@ export function App() {
     const total = tasks.length;
     const completed = tasks.filter((t) => t.status === 'done').length;
     const rate = total === 0 ? 0 : Math.round((completed / total) * 100);
-    const focusHours = Math.round((todayFocusMinutes / 60) * 10) / 10;
+    const started = tasks.filter((t) => t.status === 'doing' || t.status === 'done').length;
+    const weeklyActivity = getWeeklyActivity(focusSessions, habits);
     return {
       completionRate: rate,
-      startRate: Math.min(100, rate + 12),
+      startRate: total === 0 ? 0 : Math.round((started / total) * 100),
       postponementCount: procrastinationLogs.length,
-      focusHours: Math.max(focusHours, 8.5),
-      habitRate: 75,
+      ...weeklyActivity,
     };
-  }, [tasks, todayFocusMinutes, procrastinationLogs]);
+  }, [tasks, focusSessions, habits, procrastinationLogs]);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#fafafc] dark:bg-[#0c0d11] text-slate-900 dark:text-slate-100 flex antialiased selection:bg-brand-500 selection:text-white transition-colors duration-200">
@@ -255,8 +257,6 @@ export function App() {
               onStartBreakdown={startBreakdownWithTask}
               onOpenQuickCapture={() => setIsQuickCaptureOpen(true)}
               todayStr={todayStr}
-              onExportData={exportDataJSON}
-              onImportData={importDataJSON}
               isWeeklyReviewDue={isWeeklyReviewDue}
               onOpenWeeklyReview={() => setActiveTab('weekly_review')}
             />
@@ -347,6 +347,7 @@ export function App() {
               onExportData={exportDataJSON}
               onImportData={importDataJSON}
               onResetToMock={resetToMockData}
+              onClearAllData={clearAllData}
               statsPreview={{
                 tasksCount: tasks.length,
                 habitsCount: habits.length,

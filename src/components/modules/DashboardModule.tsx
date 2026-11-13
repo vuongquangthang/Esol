@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   CheckCircle2,
   Clock,
@@ -9,8 +9,6 @@ import {
   Plus,
   Sparkles,
   Calendar,
-  Download,
-  Upload,
   CalendarCheck,
   ArrowRight,
 } from 'lucide-react';
@@ -34,8 +32,6 @@ interface DashboardModuleProps {
   onStartBreakdown: (task: Task) => void;
   onOpenQuickCapture: () => void;
   todayStr: string;
-  onExportData?: () => void;
-  onImportData?: (jsonStr: string) => void;
   isWeeklyReviewDue?: boolean;
   onOpenWeeklyReview?: () => void;
 }
@@ -53,26 +49,9 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
   onStartBreakdown,
   onOpenQuickCapture,
   todayStr,
-  onExportData,
-  onImportData,
   isWeeklyReviewDue,
   onOpenWeeklyReview,
 }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      if (content && onImportData) {
-        onImportData(content);
-      }
-    };
-    reader.readAsText(file);
-  };
   const formattedDate = React.useMemo(() => {
     return new Date().toLocaleDateString('vi-VN', {
       weekday: 'long',
@@ -94,46 +73,10 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             Trung tâm điều hành
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Build consistency. Make progress visible.
-          </p>
         </div>
 
-        {/* Quick stats chips & Backup Button */}
+        {/* Quick stats chips */}
         <div className="flex flex-wrap items-center gap-2.5">
-          {onExportData && (
-            <button
-              type="button"
-              onClick={onExportData}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-[#181a22] border border-slate-200 dark:border-[#262934] hover:bg-slate-50 dark:hover:bg-[#20232c] shadow-sm transition-all"
-              title="Xuất bản sao lưu dữ liệu JSON"
-            >
-              <Download className="w-3.5 h-3.5 text-brand-500" />
-              <span>Backup JSON</span>
-            </button>
-          )}
-
-          {onImportData && (
-            <>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-                accept=".json"
-                className="hidden"
-              />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-[#181a22] border border-slate-200 dark:border-[#262934] hover:bg-slate-50 dark:hover:bg-[#20232c] shadow-sm transition-all"
-                title="Khôi phục dữ liệu từ tệp JSON"
-              >
-                <Upload className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Import JSON</span>
-              </button>
-            </>
-          )}
-
           <div className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#181a22] border border-slate-200 dark:border-[#262934] text-right">
             <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
               Thời gian tập trung

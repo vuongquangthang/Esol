@@ -114,7 +114,7 @@ export const WeeklyReviewModule: React.FC<WeeklyReviewModuleProps> = ({
           <div className="text-xl font-bold text-emerald-500 mt-1">
             {currentWeeklyStats.habitRate}%
           </div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Tính cả Mini-Habit</div>
+          <div className="text-[10px] text-slate-400 mt-0.5">Ngày đã đánh dấu / ngày từ đầu tuần</div>
         </div>
       </div>
 
